@@ -63,6 +63,8 @@ The Makefile will output 32 bit RISC-V. If you switch to 64 bit you may wish to 
 ## 5. Connecting to JasperGold
 The spec module can be loaded like any other module (with `-sv12`). It will also need `-incdir $SAIL_SRC/sail/lib/sv`, where `$SAIL_SRC` is the path to the Sail source you cloned in step 1.
 
+You will also need to include `stubs.sv`, which implements the external functions that the Sail was expecting to find.
+
 We typically don't work directly against the generated module - instead we create a layer on top of it we call the spec api to clean things up:
 1. It leaves CSRs we don't currently find interesting undriven
 2. It cleans up the interface for `__read_mem` and `__write_mem` since the generated names are ugly and non-descriptive
