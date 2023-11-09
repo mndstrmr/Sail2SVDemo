@@ -19,13 +19,13 @@ SAIL_FLEN := riscv_flen_D.sail
 
 # Instruction sources, depending on target
 SAIL_CHECK_SRCS = riscv_addr_checks_common.sail riscv_addr_checks.sail riscv_misa_ext.sail
-SAIL_DEFAULT_INST = riscv_insts_base.sail riscv_insts_aext.sail riscv_insts_cext.sail riscv_insts_mext.sail riscv_insts_zicsr.sail riscv_insts_next.sail riscv_insts_hints.sail
+SAIL_DEFAULT_INST = riscv_insts_base.sail riscv_insts_cext.sail riscv_insts_mext.sail riscv_insts_zicsr.sail riscv_insts_hints.sail
 # SAIL_DEFAULT_INST += riscv_insts_fext.sail riscv_insts_cfext.sail
 # SAIL_DEFAULT_INST += riscv_insts_dext.sail riscv_insts_cdext.sail
 
-SAIL_DEFAULT_INST += riscv_insts_zba.sail
-SAIL_DEFAULT_INST += riscv_insts_zbb.sail
-SAIL_DEFAULT_INST += riscv_insts_zbc.sail
+# SAIL_DEFAULT_INST += riscv_insts_zba.sail
+# SAIL_DEFAULT_INST += riscv_insts_zbb.sail
+# SAIL_DEFAULT_INST += riscv_insts_zbc.sail
 # SAIL_DEFAULT_INST += riscv_insts_zbs.sail
 
 # SAIL_DEFAULT_INST += riscv_insts_zfh.sail
@@ -101,11 +101,62 @@ SAIL_SRCS      = $(addprefix sail-riscv/model/,$(SAIL_ARCH_SRCS) $(SAIL_SEQ_INST
 
 SAIL:=sail
 
+#SAIL_SV_FLAGS=-sv -sv_comb -sv_inregs -sv_outregs -sv_nostrings -sv_nopacked -sv_nomem -Oconstant_fold -memo_z3 \
+#	-sv_unreachable translate32 -sv_unreachable walk32 \
+#	-sv_fun2wires __read_mem \
+#	-sv_fun2wires __write_mem \
+#	-sv_fun2wires wX
+
+# Make a more minimal example by default. Use the above version to include all instructions
 SAIL_SV_FLAGS=-sv -sv_comb -sv_inregs -sv_outregs -sv_nostrings -sv_nopacked -sv_nomem -Oconstant_fold -memo_z3 \
 	-sv_unreachable translate32 -sv_unreachable walk32 \
 	-sv_fun2wires __read_mem \
 	-sv_fun2wires __write_mem \
-	-sv_fun2wires wX
+	-sv_fun2wires wX \
+	-sv_unreachable execute_LOAD \
+	-sv_unreachable execute_STORE \
+	-sv_unreachable execute_C_ADD \
+	-sv_unreachable execute_C_ADDI \
+	-sv_unreachable execute_C_ADDIW \
+	-sv_unreachable execute_C_ADDI_HINT \
+	-sv_unreachable execute_C_ADDW \
+	-sv_unreachable execute_C_ADD_HINT \
+	-sv_unreachable execute_C_AND \
+	-sv_unreachable execute_C_ANDI \
+	-sv_unreachable execute_C_BEQZ \
+	-sv_unreachable execute_C_BNEZ \
+	-sv_unreachable execute_C_EBREAK \
+	-sv_unreachable execute_C_ILLEGAL \
+	-sv_unreachable execute_C_J \
+	-sv_unreachable execute_C_JAL \
+	-sv_unreachable execute_C_JALR \
+	-sv_unreachable execute_C_JR \
+	-sv_unreachable execute_C_LD \
+	-sv_unreachable execute_C_LDSP \
+	-sv_unreachable execute_C_LI \
+	-sv_unreachable execute_C_LI_HINT \
+	-sv_unreachable execute_C_LUI \
+	-sv_unreachable execute_C_LUI_HINT \
+	-sv_unreachable execute_C_LW \
+	-sv_unreachable execute_C_LWSP \
+	-sv_unreachable execute_C_MV \
+	-sv_unreachable execute_C_MV_HINT \
+	-sv_unreachable execute_C_NOP \
+	-sv_unreachable execute_C_NOP_HINT \
+	-sv_unreachable execute_C_OR \
+	-sv_unreachable execute_C_SD \
+	-sv_unreachable execute_C_SDSP \
+	-sv_unreachable execute_C_SLLI \
+	-sv_unreachable execute_C_SLLI_HINT \
+	-sv_unreachable execute_C_SRAI \
+	-sv_unreachable execute_C_SRAI_HINT \
+	-sv_unreachable execute_C_SRLI \
+	-sv_unreachable execute_C_SRLI_HINT \
+	-sv_unreachable execute_C_SUB \
+	-sv_unreachable execute_C_SUBW \
+	-sv_unreachable execute_C_SW \
+	-sv_unreachable execute_C_SWSP \
+	-sv_unreachable execute_C_XOR
 
 .PHONY: sv
 sv: $(SAIL_SRCS) main.sail Makefile

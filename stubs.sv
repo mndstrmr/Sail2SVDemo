@@ -52,5 +52,6 @@ function automatic logic sail_sys_enable_rvc(sail_unit u); return 1; endfunction
 function automatic logic sail_sys_enable_writable_misa(sail_unit u); return 0; endfunction
 function automatic logic sail_sys_enable_zfinx(sail_unit u); return 0; endfunction
 function automatic sail_unit sail_cancel_reservation(sail_unit u); return SAIL_UNIT; endfunction
+function automatic sail_unit sail_load_reservation(logic [31:0] a); return SAIL_UNIT; endfunction
 function automatic logic[31:0] sail_plat_uart_base(sail_unit u); return 0; endfunction
 function automatic logic[31:0] sail_plat_uart_size(sail_unit u); return 0; endfunction
